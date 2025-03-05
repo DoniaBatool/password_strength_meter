@@ -106,6 +106,6 @@ if st.session_state.password:
 
 else:
     st.info("Enter a password to check its strength.")
-    
+
 if st.button("🔄 Refresh"):
-    st.experimental_rerun()
+    st.rerun()
