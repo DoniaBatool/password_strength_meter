@@ -1,5 +1,6 @@
 import streamlit as st
 from password_strength import PasswordStats
+from streamlit_js_eval import streamlit_js_eval
 from gtts import gTTS
 import os
 import re
@@ -105,9 +106,9 @@ if st.session_state.password:
 
     # **Manual Copy**
     if st.button("📋 Copy to Clipboard"):
-        pyperclip.copy(suggested_password)
+        streamlit_js_eval(js_expressions="navigator.clipboard.writeText(`{}`)".format(suggested_password))
         st.success("Copied to clipboard!")
-
+        
     # **Auto-Play Voice Feedback**
     if st.session_state.audio_file:
         st.subheader("🎙️ Voice Feedback")
