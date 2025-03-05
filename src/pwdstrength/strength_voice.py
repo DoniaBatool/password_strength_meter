@@ -108,4 +108,8 @@ else:
     st.info("Enter a password to check its strength.")
 
 if st.button("🔄 Refresh"):
-    st.rerun()
+    st.session_state.password = ""
+    st.session_state.strength_score = 0
+    st.session_state.strength_text = "❌ Weak"
+    st.session_state.bar_color = "#FF4B4B"
+    st.session_state.suggestion = "Enter a password to check its strength."
