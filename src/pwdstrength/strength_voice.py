@@ -44,7 +44,8 @@ if "audio_file" not in st.session_state:
 # Streamlit UI
 st.title("🔒 Password Strength Meter with Auto-Play Voice Feedback")
 
-password = st.text_input("Enter your password:", type="password", key="password_input")
+password = st.text_input("Enter your password:", type="password", key="password_input", on_change=None)
+
 
 if password:
     if password != st.session_state.password:
@@ -68,8 +69,8 @@ if password:
         voice_message = f"{st.session_state.strength_text}. {st.session_state.suggestion}"
         st.session_state.audio_file = generate_voice_feedback(voice_message)
 
-        # ✅ **Fix: Use `st.rerun()` Instead of `st.experimental_rerun()`**
-        st.rerun()
+
+        
 
 # **Display UI if password exists**
 if st.session_state.password:
@@ -105,3 +106,6 @@ if st.session_state.password:
 
 else:
     st.info("Enter a password to check its strength.")
+    
+if st.button("🔄 Refresh"):
+    st.experimental_rerun()
