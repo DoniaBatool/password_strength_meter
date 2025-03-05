@@ -5,8 +5,6 @@ import os
 import re
 import tempfile
 from pydub import AudioSegment
-import random
-import string
 
 # Set FFmpeg path manually
 AudioSegment.converter = r"C:\ffmpeg-7.1-full_build\bin\ffmpeg.exe"
@@ -16,13 +14,6 @@ def generate_voice_feedback(text, lang="en"):
     temp_audio = tempfile.NamedTemporaryFile(delete=False, suffix=".mp3")
     tts.save(temp_audio.name)
     return temp_audio.name
-
-def generate_strong_password():
-    length = random.randint(12, 16)
-    characters = (
-        string.ascii_uppercase + string.ascii_lowercase + string.digits + "!@#$%^&*"
-    )
-    return "".join(random.choices(characters, k=length))
 
 def count_special_chars(password):
     return len(re.findall(r'[^A-Za-z0-9]', password))
@@ -46,7 +37,6 @@ st.title("🔒 Password Strength Meter with Auto-Play Voice Feedback")
 
 password = st.text_input("Enter your password:", type="password", key="password_input", on_change=None)
 
-
 if password:
     if password != st.session_state.password:
         st.session_state.password = password
@@ -69,9 +59,6 @@ if password:
         voice_message = f"{st.session_state.strength_text}. {st.session_state.suggestion}"
         st.session_state.audio_file = generate_voice_feedback(voice_message)
 
-
-        
-
 # **Display UI if password exists**
 if st.session_state.password:
     st.markdown(f"**Strength: <span style='color:{st.session_state.bar_color};'>{st.session_state.strength_text}</span>**", unsafe_allow_html=True)
@@ -93,23 +80,12 @@ if st.session_state.password:
     st.subheader("📝 Feedback")
     st.write(st.session_state.suggestion)
 
-    suggested_password = generate_strong_password()
-    st.subheader("🔑 AI-Suggested Strong Password")
-    st.code(suggested_password, language="plaintext")
-
     if st.session_state.audio_file:
         st.subheader("🎙️ Voice Feedback")
         st.audio(st.session_state.audio_file, format="audio/mp3", autoplay=True)
 
         with open(st.session_state.audio_file, "rb") as file:
             st.download_button(label="🔊 Download Voice Feedback", data=file, file_name="password_feedback.mp3", mime="audio/mpeg")
-
 else:
     st.info("Enter a password to check its strength.")
 
-if st.button("🔄 Refresh"):
-    st.session_state.password = ""
-    st.session_state.strength_score = 0
-    st.session_state.strength_text = "❌ Weak"
-    st.session_state.bar_color = "#FF4B4B"
-    st.session_state.suggestion = "Enter a password to check its strength."
